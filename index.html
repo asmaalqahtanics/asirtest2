@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>درع الوعي — وعيك أقوى حماية</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#10302c;--mut:#587570;--card:#fff;--line:#d6e1de;--pri:#0f6b5c;--bad:#b3261e;--ok:#1b7a3d;--soft:#f3f7f6;--warn:#fff1c9;--l1:92%;--l2:82%;--h:165;color-scheme:light}
+@media(prefers-color-scheme:dark){:root{--ink:#e8f2ef;--mut:#9fb5b0;--card:#16282a;--line:#2d4642;--pri:#4cc2ad;--bad:#ff8a80;--ok:#6fd58f;--soft:#0f1d1f;--warn:#4a3d12;--l1:12%;--l2:19%;color-scheme:dark}}
+body[data-lv="1"]{--h:215}body[data-lv="2"]{--h:32}body[data-lv="3"]{--h:285}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--ink);font:17px/1.7 Tajawal,system-ui,"Segoe UI",Tahoma,sans-serif;padding:16px;background:linear-gradient(160deg,hsl(var(--h) 55% var(--l1)),hsl(var(--h) 60% var(--l2)));transition:background .6s}
+main{max-width:640px;margin:auto;position:relative;z-index:1}
+.orb{position:fixed;border-radius:50%;opacity:.28;background:hsl(var(--h) 70% 55%);z-index:0;pointer-events:none}
+.o1{width:220px;height:220px;top:-60px;inset-inline-start:-60px}.o2{width:160px;height:160px;bottom:10%;inset-inline-end:-40px}.o3{width:90px;height:90px;top:45%;inset-inline-start:8%}
+@media(prefers-reduced-motion:no-preference){.orb{animation:fl 9s ease-in-out infinite alternate}.o2{animation-duration:12s}.o3{animation-duration:7s}.card{animation:up .35s ease-out}.toast{animation:pop .5s ease-out}}
+@keyframes fl{to{transform:translate(24px,-30px) scale(1.12)}}@keyframes up{from{opacity:0;transform:translateY(10px)}}@keyframes pop{from{transform:scale(.8);opacity:0}}
+h1{font-size:30px;margin:6px 0}h2{font-size:21px;margin:0 0 4px}p{margin:6px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:12px 0}
+.mut{color:var(--mut);font-size:15px}.no{color:var(--bad)}.ok{color:var(--ok)}
+input{width:100%;padding:12px;margin:5px 0;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--soft);color:var(--ink)}
+button{font:inherit;padding:12px 18px;border-radius:10px;border:1px solid var(--pri);background:var(--pri);color:var(--card);cursor:pointer;min-height:44px}
+button.alt{background:transparent;color:var(--pri)}button:disabled{opacity:.6}
+button:focus-visible,input:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+.pick{display:block;width:100%;text-align:right;background:var(--soft);color:var(--ink);border:1px solid var(--line);margin:6px 0}
+.pick.on{background:var(--warn);border-color:var(--bad)}.pick.sel{border:2px solid var(--pri);background:var(--card)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:15px}
+.chip{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:2px 12px}
+.dots{display:flex;gap:5px;margin:8px 0}.dots i{flex:1;height:7px;border-radius:4px;background:var(--line)}.dots i.d{background:var(--pri)}.dots i.c{background:hsl(var(--h) 70% 50%)}
+.row{display:flex;gap:8px;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding:8px 0}
+.seg{display:flex;gap:6px;margin:4px 0 10px}.seg button{flex:1;padding:8px}.seg button.on{background:var(--pri);color:var(--card)}
+.ltr{direction:ltr;text-align:left;font-family:monospace}
+.sw{width:56px;height:30px;border-radius:15px;background:var(--line);border:0;position:relative;padding:0;flex:none}
+.sw::after{content:"";position:absolute;top:3px;inset-inline-start:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:inset-inline-start .15s}
+.sw[aria-checked=true]{background:var(--pri)}.sw[aria-checked=true]::after{inset-inline-start:29px}
+.toast{background:var(--card);border:2px solid hsl(var(--h) 70% 45%);border-radius:12px;padding:8px 14px;text-align:center;font-weight:700}
+.big{font-size:44px;font-weight:700;text-align:center;margin:0}
+</style>
+</head>
+<body data-lv="0">
+<div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+<main><h1>🛡️ درع الوعي</h1><p class="mut">وعيك أقوى حماية</p><div id="app"></div></main>
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbwjfgvyBSumoS_7tFS_Oc5ix-NxFA5svFpHqr_lyYsJ1IfckhIqCGCb8puU_7SRq5Je/exec"; // رابط تطبيق الويب (ينتهي بـ /exec)
+const LV=["سهل","متوسط","صعب","خبير"], lvOf=i=>i<3?0:i<6?1:i<8?2:3, PTS=[6,6,8,8,10,10,10,12,14,16];
+const SAFE=["آمن","خطر"];
+const T=[
+ {type:"choice",title:"جائزة مفاجئة",hint:"وصلتك رسالة: «مبروك! فزت بسيارة. اضغط الرابط لاستلام جائزتك». وش تسوي؟",items:["أفتح الرابط وأشوف","أحذفها وأبلّغ عن الرسالة","أرسلها لأصحابي يستفيدون","أرد وأعطيهم بياناتي"]},
+ {type:"judge",title:"آمن أم خطر؟",hint:"احكم على كل تصرف.",items:["تفعيل قفل الشاشة","إعطاء رمز التحقق لصديق يطلبه","تحديث تطبيقات الجوال","كتابة كلمة المرور على ورقة ملصقة بالشاشة"]},
+ {type:"spot",title:"رسالة شحن",hint:"اضغط على الأجزاء المشبوهة. الضغط على جزء سليم يخصم من درجتك.",items:["شركة الشحن: لديك طرد بانتظارك.","ادفع 12 ريال خلال ساعة وإلا يُعاد الطرد!","للدفع اضغط: aramex-track.top/pay","رقم التتبع: 4821 7730","أدخل بيانات بطاقتك مع الرقم السري","نشكر لك اختيارك خدماتنا."]},
+ {type:"rank",ltr:1,title:"رتّب كلمات المرور",hint:"من الأضعف (الأول) إلى الأقوى (الأخير). استخدم الأسهم.",items:[["c","Ahmed@1995"],["e","blue-Camel-River-92-Lamp"],["a","password1"],["d","Zq7#mK2!vL9p"],["b","ahmed1995"]]},
+ {type:"switch",title:"اضبط جوالك",hint:"فعّل ما يحميك وأغلق ما يضرّك. انتبه: واحد منها مضبوط صح من الأصل.",items:[["a","قفل الشاشة برمز",false],["b","التحقق بخطوتين",false],["c","التحديثات التلقائية",false],["d","تثبيت تطبيقات من مصادر مجهولة",true],["e","الاتصال التلقائي بأي واي فاي مفتوح",true],["f","تشفير الجهاز",true]]},
+ {type:"spot",title:"موقع مزيف",hint:"هذه صفحة بنك وهمية. اضغط على الأشياء المريبة فيها.",ltr0:1,items:["العنوان: http://alrajhi-bank-login.xyz","تسجيل الدخول","🎁 اربح 5000 ريال الآن!","رقم الهوية","الرقم السري للصراف ورمز CVV","سياسة الخصوصية","كلمة المرور","⏱ حسابك سيُغلق خلال 10 دقائق!"]},
+ {type:"choice",title:"اتصال من «البنك»",hint:"اتصل بك رقم يقول إنه من البنك: «عندنا عملية مشبوهة على حسابك، قل لنا الرمز اللي وصلك نوقفها». وش تسوي؟",items:["أعطيه الرمز لأنه عارف اسمي","أسكّر الخط وأتصل بالبنك من الرقم الرسمي","أطلب منه يرسل لي رسالة نصية","أعطيه نصف الرمز فقط"]},
+ {type:"spot",title:"بريد أمني مقنع",hint:"فيه 4 فخاخ، وبعضها خفي. تفحّص بتركيز.",items:["من: security@paypa1-support.com","الموضوع: تنبيه أمني","رصدنا دخولًا غريبًا من دولة أخرى.","لحماية حسابك افتح المرفق: Invoice.pdf.exe","إذا ما تفاعلت خلال 24 ساعة سنجمّد حسابك.","للمساعدة اتصل بالرقم المطبوع على موقعنا الرسمي.","مع تحيات فريق الدعم","اكتب كلمة مرورك في الرد لنتحقق منك."]},
+ {type:"judge",title:"أحكام مخادعة",hint:"بعضها يبدو سليمًا وهو خطر، والعكس. فكّر.",items:["استخدام مدير كلمات مرور موثوق","الدخول لحسابك البنكي من واي فاي مقهى مفتوح","مسح QR على ملصق في موقف السيارات","تثبيت تطبيق من المتجر الرسمي بعد قراءة تقييماته","فتح مرفق صديق دون سؤاله لأنه جاء من رقمه","تسجيل الخروج من حسابك على جهاز مشترك"]},
+ {type:"rank",title:"أنت وقعت، وش بعدين؟",hint:"أعطيت بياناتك لموقع مزيف. رتّب خطواتك من الأولى للأخيرة.",items:[["d","راجع العمليات الأخيرة في حسابك"],["b","غيّر كلمة المرور"],["a","اتصل بالبنك وجمّد البطاقة"],["e","بلّغ الجهات المختصة"],["c","فعّل التحقق بخطوتين"]]}
+];
+const $=s=>document.querySelector(s), app=$("#app"), esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let id=null,i=0,ans=[],t0=0,tm=null;
+async function call(b){const r=await fetch(API_URL,{method:"POST",body:JSON.stringify(b)});return r.json()}
+
+function reg(msg,v){v=v||{};
+  app.innerHTML=`<div class="card"><h2>سجّل بياناتك</h2><p class="mut">10 أسئلة تتدرّج من السهل للخبير. الفائز صاحب أعلى درجة ثم الأسرع. بعد التسجيل يصلك رمز تحقق على بريدك.</p>
+  <input id="nm" placeholder="الاسم الرباعي" autocomplete="name" value="${esc(v.nm||"")}">
+  <input id="ph" type="tel" inputmode="numeric" placeholder="رقم الجوال (05xxxxxxxx)" dir="ltr" value="${esc(v.ph||"")}">
+  <input id="em" type="email" placeholder="البريد الإلكتروني" dir="ltr" autocomplete="email" value="${esc(v.em||"")}">
+  <p class="no" id="msg" role="alert">${msg||""}</p><button id="go">أرسل رمز التحقق</button></div><div id="lb"></div>`;
+  $("#go").onclick=async()=>{
+    const v={nm:$("#nm").value.trim(),ph:$("#ph").value.trim(),em:$("#em").value.trim()};
+    if(v.nm.split(/\s+/).length<4)return $("#msg").textContent="اكتب اسمك الرباعي كاملًا.";
+    if(!/^(\+?966|0)?5\d{8}$/.test(v.ph.replace(/[\s-]/g,"")))return $("#msg").textContent="رقم الجوال غير صحيح.";
+    if(!/^\S+@\S+\.\S+$/.test(v.em))return $("#msg").textContent="البريد غير صحيح.";
+    $("#go").disabled=true;$("#go").textContent="جارٍ الإرسال…";
+    try{const r=await call({action:"sendcode",name:v.nm,phone:v.ph,email:v.em});
+      r.error?reg(r.error,v):(id=r.id,ver(v))}catch(e){reg("تعذّر الاتصال. تأكد من رابط الخدمة.",v)}
+  };
+  if(!API_URL.startsWith("http"))return;
+  fetch(API_URL).then(r=>r.json()).then(r=>{$("#lb").innerHTML=r.top&&r.top.length?`<div class="card"><h2>المتصدرون</h2>${r.top.map((x,k)=>`<div class="row"><span>${k+1}. <bdi>${esc(x.name)}</bdi></span><span>${x.score} · ${x.secs}ث</span></div>`).join("")}</div>`:""}).catch(()=>{});
+}
+
+function ver(v,msg){
+  app.innerHTML=`<div class="card"><h2>رمز التحقق</h2><p class="mut">أرسلنا رمزًا من 6 أرقام إلى <bdi>${esc(v.em)}</bdi>. إذا ما وصل، افحص البريد غير الهام.</p>
+  <input id="cd" inputmode="numeric" maxlength="6" placeholder="••••••" dir="ltr" autocomplete="one-time-code">
+  <p class="no" id="msg" role="alert">${msg||""}</p><button id="vr">تحقق وابدأ</button> <button class="alt" id="rs">إعادة الإرسال</button></div>`;
+  $("#vr").onclick=async()=>{$("#vr").disabled=true;
+    try{const r=await call({action:"verify",id,code:$("#cd").value});
+      if(r.error){ver(v,r.error);return}
+      i=0;ans=[];t0=Date.now();tm=setInterval(tick,1000);render();
+    }catch(e){ver(v,"تعذّر الاتصال.")}};
+  $("#rs").onclick=async()=>{$("#rs").disabled=true;
+    try{const r=await call({action:"sendcode",name:v.nm,phone:v.ph,email:v.em});
+      r.error?ver(v,r.error):(id=r.id,ver(v,"أُرسل رمز جديد."))}catch(e){ver(v,"تعذّر الاتصال.")}};
+}
+
+function tick(){const s=Math.floor((Date.now()-t0)/1000),e=$("#tm");if(e)e.textContent=Math.floor(s/60)+":"+String(s%60).padStart(2,"0")}
+
+function render(){
+  const t=T[i],l=lvOf(i),up=i>0&&lvOf(i-1)!=l;document.body.dataset.lv=l;
+  app.innerHTML=`<div class="top"><span class="chip">${LV[l]}</span><span>سؤال ${i+1} من 10</span><span class="chip" id="tm">0:00</span></div>
+  <div class="dots">${T.map((_,k)=>`<i class="${k<i?"d":k==i?"c":""}"></i>`).join("")}</div>
+  ${up?`<div class="toast">🔥 ارتفعت للمستوى: ${LV[l]}</div>`:""}
+  <div class="card"><p class="mut">${PTS[i]} درجة</p><h2>${t.title}</h2><p class="mut">${t.hint}</p><div id="body"></div>
+  <p class="no" id="msg" role="alert"></p><button id="nx">${i==9?"أنهِ وأرسل":"التالي"}</button></div>`;
+  const b=$("#body");
+  if(t.type=="choice"){b.innerHTML=t.items.map((x,k)=>`<button class="pick ${ans[i]===k?"sel":""}" data-k="${k}">${esc(x)}</button>`).join("");
+    b.onclick=e=>{const el=e.target.closest(".pick");if(!el)return;ans[i]=+el.dataset.k;b.querySelectorAll(".pick").forEach(x=>x.classList.toggle("sel",x==el))}}
+  if(t.type=="spot"){const s=ans[i]=ans[i]||[];
+    b.innerHTML=t.items.map((x,k)=>`<button class="pick ${t.ltr0&&k==0?"ltr":""} ${s.includes(k)?"on":""}" data-k="${k}" aria-pressed="${s.includes(k)}">${esc(x)}</button>`).join("");
+    b.onclick=e=>{const el=e.target.closest(".pick");if(!el)return;const k=+el.dataset.k,p=s.indexOf(k);p>-1?s.splice(p,1):s.push(k);el.classList.toggle("on",p<0);el.setAttribute("aria-pressed",p<0)}}
+  if(t.type=="judge"){const a=ans[i]=ans[i]||[];
+    b.innerHTML=t.items.map((x,k)=>`<div><p>${esc(x)}</p><div class="seg" data-k="${k}"><button class="${a[k]===true?"on":""}" data-v="1">آمن</button><button class="${a[k]===false?"on":""}" data-v="0">خطر</button></div></div>`).join("");
+    b.onclick=e=>{const el=e.target.closest("button");if(!el)return;a[+el.parentNode.dataset.k]=el.dataset.v=="1";[...el.parentNode.children].forEach(c=>c.classList.toggle("on",c==el))}}
+  if(t.type=="rank"){const o=ans[i]=ans[i]||t.items.map(x=>x[0]),nm=Object.fromEntries(t.items);
+    const draw=()=>{b.innerHTML=o.map((k,n)=>`<div class="row"><span class="${t.ltr?"ltr":""}">${esc(nm[k])}</span><span><button class="alt" data-n="${n}" data-d="-1" aria-label="أعلى">▲</button> <button class="alt" data-n="${n}" data-d="1" aria-label="أسفل">▼</button></span></div>`).join("")};draw();
+    b.onclick=e=>{const el=e.target.closest("button");if(!el)return;const n=+el.dataset.n,m=n+ +el.dataset.d;if(m<0||m>=o.length)return;[o[n],o[m]]=[o[m],o[n]];draw()}}
+  if(t.type=="switch"){const s=ans[i]=ans[i]||Object.fromEntries(t.items.map(x=>[x[0],x[2]]));
+    b.innerHTML=t.items.map(x=>`<div class="row"><span>${x[1]}</span><button class="sw" role="switch" data-k="${x[0]}" aria-checked="${s[x[0]]}" aria-label="${x[1]}"></button></div>`).join("");
+    b.onclick=e=>{const el=e.target.closest(".sw");if(!el)return;s[el.dataset.k]=!s[el.dataset.k];el.setAttribute("aria-checked",s[el.dataset.k])}}
+  $("#nx").onclick=async()=>{
+    const a=ans[i];
+    if(t.type=="choice"&&a==null)return $("#msg").textContent="اختر إجابة أولًا.";
+    if(t.type=="judge"&&Object.keys(a).length<t.items.length)return $("#msg").textContent="احكم على كل التصرفات أولًا.";
+    if(i<9){i++;render();window.scrollTo(0,0);return}
+    $("#nx").disabled=true;$("#nx").textContent="جارٍ التصحيح…";
+    try{const r=await call({action:"submit",id,answers:ans});clearInterval(tm);r.error?(app.innerHTML=`<div class="card no">${r.error}</div>`):result(r)}
+    catch(e){$("#nx").disabled=false;$("#nx").textContent="أعد المحاولة"}
+  };
+}
+
+function result(r){
+  document.body.dataset.lv=0;
+  const t=r.total>=85?"درع لا يُخترق 🛡️":r.total>=65?"عين حادّة":r.total>=40?"متدرّب واعد":"ابدأ من جديد وستتحسّن";
+  app.innerHTML=`<div class="card"><p class="big">${r.total}<span class="mut" style="font-size:20px"> / 100</span></p><h2 style="text-align:center">${t}</h2><p class="mut" style="text-align:center">الوقت: ${r.secs} ثانية</p></div>`+
+  r.review.map((x,k)=>`<details class="card"><summary>${k+1}. ${T[k].title} — <span class="${x.s>=x.max?"ok":x.s>0?"":"no"}">${x.s} من ${x.max}</span></summary><p><b>الصحيح:</b> ${esc(x.show)}</p><p class="mut">${esc(x.why)}</p></details>`).join("");
+}
+reg();
+</script>
+</body>
+</html>
